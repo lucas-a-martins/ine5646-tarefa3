@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pokémon Favoritos</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="estilo.css">
+    </head>
+
+    <body>
+    	<div class="container">
+    		<div class="container-banner">
+				<div class="banner"></div>
+				<p class="titulo-banner">Meus Pokémon favoritos</p>
+				<img class="avatar" src="imagens/eu.jpg">
+    		</div>
+    		<div class="container-post" id="container-post">
+			</div>
+		</div>
+		
+	<script>
+		class Pokemon {
+			constructor(icone, nome, localizador, tipo1, tipo2, descricao, imagem) {
+				this.icone = icone;
+				this.nome = nome;
+				this.localizador = localizador;
+				this.tipo1 = tipo1;
+				this.tipo2 = tipo2;
+				this.descricao = descricao;
+				this.imagem = imagem;
+			}
+		}
+
+		var pokemon = [
+			new Pokemon('imagens/rowlet-mini.png', 'Rowlet', '#722 - Alola: ','imagens/grass.gif','imagens/flying.gif', 'Rowlet is a small, avian Pokémon resembling a young owl with a round body and short legs. Its plumage is primarily beige with a white underside and facial disc. The facial disc itself is in the shape of two overlapping circles. It has large black eyes and a stubby beak. The top part of its beak is white, while the lower half is an orange-brown. Its feet have two forward-facing toes and one backward facing toe; they are the same color as the lower half of its beak. Two leaves sprout from its chest, arranged to resemble a bowtie. Additional leaves form its tail and line the undersides of its wings.', 'imagens/Rowlet.png'),
+
+			new Pokemon('imagens/poliwhirl-mini.png', 'Poliwhirl', '#061 - Kanto: ','imagens/water.gif','', 'Poliwhirl is a blue, bipedal Pokémon with a spherical body. It has bulbous eyes that protrude from the top of its head. A black and white swirl covers its belly, which is actually its organs showing through its thin skin. It appears to have white gloves on its hands and rounded, digit-less feet. When out of water, it sweats to keep its skin moist and healthy. This keeps it covered in an oily fluid that allows it to slip away from enemies. All of its skin feels this way except where its swirl is, which is instead very smooth. The swirl on its belly undulates slowly and staring at it induces drowsiness.', 'imagens/Poliwhirl.png'),
+
+			new Pokemon('imagens/lucario-mini.png', 'Lucario', '#448 - Sinnoh: ','imagens/fighting.gif','imagens/steel.gif', 'Lucario is a bipedal, canine-like Pokémon, with fur that is predominantly blue and black. It possesses a short, round spike on the back of each forepaw, in addition to a third on its chest. It has red eyes, a long snout and ears. When its mouth is open, two pairs of pointed teeth, one in the upper jaw and one in the lower, can be seen. It possesses cream-colored fur on its torso, and blue fur on its thighs that resembles shorts. It has a medium length tail of the same blue color as well. It stands on its toes rather than on its entire foot. It has developed four black appendages that hang down from its head, which rise when Lucario reads or manipulates aura, a special energy that it senses. Lucario can study this energy to predict the movements of their opponents and track their quarry. They also have the power to manipulate this energy in an offensive manner, in the form of explosive spheres of energy. Lucario can understand human speech, and have been reported to communicate with humans through telepathy.', 'imagens/Lucario.png'),
+
+			new Pokemon('imagens/greninja-mini.png', 'Greninja', '#658 - Kalos: ','imagens/water.gif','imagens/dark.gif', 'Greninja is a bipedal, frog-like Pokémon. It is mostly dark blue with a yellow chest, a white triangular marking over each eye, a light blue four-pointed star on each thigh, and yellow on the lower half of its face. It has red eyes with white pupils and its mouth is hidden behind a large, pink tongue that wraps around its neck and extends outward behind its head. Running down the middle of its head is a fin-like extension, and there is a similar fin on each side of its head. Light blue webbing connects its head fins. There is a large, white bubble-like bump on each elbow and knee. Its back feet have two toes, while its front feet have three toes. Each digit has a bulbous tip and yellow webbing.', 'imagens/Greninja.png'),
+
+			new Pokemon('imagens/hawlucha-mini.png', 'Hawlucha', '#701 - Kalos: ','imagens/fighting.gif','imagens/flying.gif', 'Hawlucha is a bipedal bird-like Pokémon with colorful plumage. Its head curves into a beak-shape in the front, but its mouth is located in a white patch under the beaks curve. It has a blue-green mask-like marking across its face, an orange blaze running from its forehead to the back of its neck, an orange ring around each eye, and a small, red patch at the tip of its beak. There is black space around its eyes, which are yellow with paler yellow sclerae. On the back of its head are two rectangular, tassel-like feathers. Its red, cape-like wings have blue-green undersides and are connected to its feathery tail. Near the tip of each wing is a three-clawed hand. Its front is white with a line of red along its neck and the top of its chest. It has small, yellow feet with three toes each.', 'imagens/Hawlucha.png'),
+		];
+
+		var isLiked = false;
+
+		function criarPost(pokemon) {
+			var div;
+			
+			for (i = 0; i < pokemon.length; i++){
+				div = document.createElement('div');
+				div.id = 'post-'+i;
+				div.innerHTML = '<div class="titulo"><img src="'+pokemon[i].icone+'"><p class="titulo-post">'+pokemon[i].nome+'</p></div>'+
+				'<div class="subtitulo">'+pokemon[i].localizador+'</p>'+'<img class="espacamento" src="'+pokemon[i].tipo1+'">'+'<img src="'+pokemon[i].tipo2+'">'+'</div>'+
+					'<p class="descricao">'+pokemon[i].descricao+'</p><img class="imagem-post" src="'+pokemon[i].imagem+'">'+
+					'<div class="feedback"><img class="botao" id="curtida-'+i+'" src="imagens/like.png" onclick="curtir(this.id, '+i+')"><p class="quantidade" id="quantidade-curtida-'+i+'">0</p>'+
+					'<img class="botao" id="descurtida-'+i+'" src="imagens/dislike.png" onclick="descurtir(this.id, '+i+')"><p class="quantidade" id="quantidade-descurtida-'+i+'">0</p></div>';
+				div.className = 'post';
+				
+				document.getElementById('container-post').appendChild(div);
+			}
+		}
+
+		function curtir(id, index) {
+			var curtida = document.getElementById('quantidade-'+id).textContent;
+
+			if (curtida == "0") {
+				document.getElementById('quantidade-'+id).textContent = "1";
+				document.getElementById(id).style.opacity = 1;
+
+				document.getElementById('quantidade-descurtida-'+index).textContent = "0";
+				document.getElementById('descurtida-'+index).style.opacity = .5;
+			} else {
+				document.getElementById('quantidade-'+id).textContent = "0";
+				document.getElementById(id).style.opacity = .5;
+			}
+		}
+
+		function descurtir(id, index) {
+			var descurtida = document.getElementById('quantidade-'+id).textContent;
+
+			if (descurtida == "0") {
+				document.getElementById('quantidade-'+id).textContent = "1";
+				document.getElementById(id).style.opacity = 1;
+
+				document.getElementById('quantidade-curtida-'+index).textContent = "0";
+				document.getElementById('curtida-'+index).style.opacity = .5;
+			} else {
+				document.getElementById('quantidade-'+id).textContent = "0";
+				document.getElementById(id).style.opacity = .5;
+			}
+		}
+
+		document.addEventListener('DOMContentLoaded', function() {
+			criarPost(pokemon);
+ 		}, false);
+	</script>
+    </body>
+
+</html>
